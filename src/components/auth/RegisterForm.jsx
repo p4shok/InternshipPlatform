@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import axios from "axios";
 import AuthInput from "./AuthInput";
 import PasswordInput from "./PasswordInput";
+import { Link } from "react-router-dom";
 
 const initialState = {
   firstName: "",
@@ -222,10 +223,13 @@ const RegisterForm = () => {
         </button>
 
         <p className="text-center text-sm text-slate-500">
-          Уже есть аккаунт?{" "}
-          <span className="cursor-pointer font-medium text-indigo-600 hover:text-indigo-700">
+            Уже есть аккаунт?{" "}
+        <Link
+            to="/student/login"
+            className="font-medium text-indigo-600 hover:text-indigo-700"
+        >
             Войти
-          </span>
+        </Link>
         </p>
       </form>
     </div>
