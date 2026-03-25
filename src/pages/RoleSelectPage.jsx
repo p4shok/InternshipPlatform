@@ -20,15 +20,13 @@ const RoleSelectPage = () => {
 
             <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
               Платформа помогает студентам находить стажировки и вакансии,
-              а компаниям — перспективных кандидатов.
+              а работодателям — перспективных кандидатов.
             </p>
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/60 sm:p-10">
             <div className="mb-8 text-center">
-              <h2 className="text-2xl font-bold text-slate-900">
-                Кто вы?
-              </h2>
+              <h2 className="text-2xl font-bold text-slate-900">Кто вы?</h2>
               <p className="mt-2 text-sm text-slate-500">
                 Выберите подходящий вариант для продолжения
               </p>
@@ -43,8 +41,8 @@ const RoleSelectPage = () => {
               </button>
 
               <button
-                disabled
-                className="w-full cursor-not-allowed rounded-2xl border border-slate-200 bg-slate-100 px-5 py-4 text-base font-semibold text-slate-400"
+                onClick={() => navigate("/employer/auth")}
+                className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-base font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:text-indigo-700 hover:shadow-md"
               >
                 Я работодатель
               </button>

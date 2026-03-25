@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import AuthInput from "./AuthInput";
 import PasswordInput from "./PasswordInput";
-import { loginStudent } from "../../api/auth.api";
+import { loginStudent, loginEmployer } from "../../api/auth.api";
 
-const LoginForm = () => {
+const LoginForm = ({ role = "student" }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -11,6 +12,8 @@ const LoginForm = () => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isEmployer = role === "employer";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,12 +60,12 @@ const LoginForm = () => {
       setIsSubmitting(true);
       setErrors({});
 
-      await loginStudent({
+      const loginAction = isEmployer ? loginEmployer : loginStudent;
+
+      await loginAction({
         email: formData.email,
         password: formData.password,
       });
-
-      // Здесь потом можно будет сделать navigate(...) на защищённую страницу
     } catch (error) {
       setErrors({
         server:
@@ -78,7 +81,9 @@ const LoginForm = () => {
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-slate-900">Вход</h1>
         <p className="mt-2 text-sm text-slate-500">
-          Войдите в аккаунт студента
+          {isEmployer
+            ? "Войдите в аккаунт работодателя"
+            : "Войдите в аккаунт студента"}
         </p>
       </div>
 
@@ -89,7 +94,7 @@ const LoginForm = () => {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="student@example.com"
+          placeholder="example@mail.com"
           error={errors.email}
           autoComplete="email"
         />
@@ -117,6 +122,16 @@ const LoginForm = () => {
         >
           {isSubmitting ? "Вход..." : "Войти"}
         </button>
+
+        <p className="text-center text-sm text-slate-500">
+          Нет аккаунта?{" "}
+          <Link
+            to={isEmployer ? "/employer/register" : "/student/register"}
+            className="font-medium text-indigo-600 hover:text-indigo-700"
+          >
+            Зарегистрироваться
+          </Link>
+        </p>
       </form>
     </div>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/auth/LoginForm";
 
-const StudentLoginPage = () => {
+const EmployerLoginPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -11,7 +11,7 @@ const StudentLoginPage = () => {
         <div className="w-full">
           <div className="mb-6">
             <button
-              onClick={() => navigate("/student/auth")}
+              onClick={() => navigate("/employer/auth")}
               className="text-sm font-medium text-slate-500 transition hover:text-slate-800"
             >
               ← Назад
@@ -19,7 +19,7 @@ const StudentLoginPage = () => {
           </div>
 
           <div className="flex justify-center">
-            <LoginForm role="student" />
+            <LoginForm role="employer" />
           </div>
         </div>
       </div>
@@ -27,4 +27,4 @@ const StudentLoginPage = () => {
   );
 };
 
-export default StudentLoginPage;
+export default EmployerLoginPage;
