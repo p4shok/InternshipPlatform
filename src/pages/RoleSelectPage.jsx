@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes/routePaths";
 
 const RoleSelectPage = () => {
   const navigate = useNavigate();
@@ -34,14 +35,14 @@ const RoleSelectPage = () => {
 
             <div className="space-y-4">
               <button
-                onClick={() => navigate("/student/auth")}
+                onClick={() => navigate(ROUTES.STUDENT_AUTH)}
                 className="w-full rounded-2xl bg-indigo-600 px-5 py-4 text-base font-semibold text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-0.5 hover:bg-indigo-700"
               >
                 Я студент
               </button>
 
               <button
-                onClick={() => navigate("/employer/auth")}
+                onClick={() => navigate(ROUTES.EMPLOYER_AUTH)}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-base font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:text-indigo-700 hover:shadow-md"
               >
                 Я работодатель

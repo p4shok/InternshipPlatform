@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../routes/routePaths";
 
 const StudentAuthChoicePage = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const StudentAuthChoicePage = () => {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <button
-              onClick={() => navigate("/student/login")}
+              onClick={() => navigate(ROUTES.STUDENT_LOGIN)}
               className="rounded-2xl border border-slate-200 bg-white px-5 py-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-md"
             >
               <div className="text-lg font-semibold text-slate-900">Войти</div>
@@ -33,7 +34,7 @@ const StudentAuthChoicePage = () => {
             </button>
 
             <button
-              onClick={() => navigate("/student/register")}
+              onClick={() => navigate(ROUTES.STUDENT_REGISTER)}
               className="rounded-2xl bg-indigo-600 px-5 py-5 text-left text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-0.5 hover:bg-indigo-700"
             >
               <div className="text-lg font-semibold">Зарегистрироваться</div>
@@ -45,7 +46,7 @@ const StudentAuthChoicePage = () => {
 
           <div className="mt-6 text-center">
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate(ROUTES.HOME)}
               className="text-sm font-medium text-slate-500 transition hover:text-slate-800"
             >
               ← Вернуться назад

@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react";
-import AuthInput from "./AuthInput";
-import PasswordInput from "./PasswordInput";
-import { registerStudent } from "../../api/auth.api";
 import { Link } from "react-router-dom";
+import AuthInput from "../../../components/ui/AuthInput";
+import PasswordInput from "../../../components/ui/PasswordInput";
+import { registerStudent } from "../../auth/api/auth.api";
+import { ROUTES } from "../../../routes/routePaths";
 
 const initialState = {
   firstName: "",
@@ -12,7 +13,7 @@ const initialState = {
   passwordConfirm: "",
 };
 
-const RegisterForm = () => {
+const StudentRegisterForm = () => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -97,15 +98,13 @@ const RegisterForm = () => {
       setErrors({});
       setSuccessMessage("");
 
-      const payload = {
+      await registerStudent({
         name: formData.firstName,
         surname: formData.lastName,
         email: formData.email,
         password: formData.password,
         passwordConfirm: formData.passwordConfirm,
-      };
-
-      await registerStudent(payload);
+      });
 
       setSuccessMessage("Регистрация прошла успешно!");
       setFormData(initialState);
@@ -228,7 +227,7 @@ const RegisterForm = () => {
         <p className="text-center text-sm text-slate-500">
           Уже есть аккаунт?{" "}
           <Link
-            to="/student/login"
+            to={ROUTES.STUDENT_LOGIN}
             className="font-medium text-indigo-600 hover:text-indigo-700"
           >
             Войти
@@ -239,4 +238,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default StudentRegisterForm;

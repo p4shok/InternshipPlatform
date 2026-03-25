@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import AuthInput from "./AuthInput";
-import PasswordInput from "./PasswordInput";
-import { registerEmployer } from "../../api/auth.api";
+import AuthInput from "../../../components/ui/AuthInput";
+import PasswordInput from "../../../components/ui/PasswordInput";
+import { registerEmployer } from "../../auth/api/auth.api";
+import { ROUTES } from "../../../routes/routePaths";
 
 const initialState = {
   email: "",
@@ -99,15 +100,13 @@ const EmployerRegisterForm = () => {
       setErrors({});
       setSuccessMessage("");
 
-      const payload = {
+      await registerEmployer({
         email: formData.email,
         companyName: formData.companyName,
         inn: formData.inn,
         password: formData.password,
         passwordConfirm: formData.passwordConfirm,
-      };
-
-      await registerEmployer(payload);
+      });
 
       setSuccessMessage("Регистрация работодателя прошла успешно.");
       setFormData(initialState);
@@ -227,7 +226,7 @@ const EmployerRegisterForm = () => {
         <p className="text-center text-sm text-slate-500">
           Уже есть аккаунт?{" "}
           <Link
-            to="/employer/login"
+            to={ROUTES.EMPLOYER_LOGIN}
             className="font-medium text-indigo-600 hover:text-indigo-700"
           >
             Войти

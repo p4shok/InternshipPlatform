@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AuthInput from "./AuthInput";
-import PasswordInput from "./PasswordInput";
-import { loginStudent, loginEmployer } from "../../api/auth.api";
+import AuthInput from "../../../components/ui/AuthInput";
+import PasswordInput from "../../../components/ui/PasswordInput";
+import { loginStudent, loginEmployer } from "../api/auth.api";
+import { ROUTES } from "../../../routes/routePaths";
 
 const LoginForm = ({ role = "student" }) => {
   const [formData, setFormData] = useState({
@@ -126,7 +127,7 @@ const LoginForm = ({ role = "student" }) => {
         <p className="text-center text-sm text-slate-500">
           Нет аккаунта?{" "}
           <Link
-            to={isEmployer ? "/employer/register" : "/student/register"}
+            to={isEmployer ? ROUTES.EMPLOYER_REGISTER : ROUTES.STUDENT_REGISTER}
             className="font-medium text-indigo-600 hover:text-indigo-700"
           >
             Зарегистрироваться
