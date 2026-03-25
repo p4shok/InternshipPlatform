@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import AuthInput from "./AuthInput";
 import PasswordInput from "./PasswordInput";
+import { loginStudent } from "../../api/auth.api";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -57,7 +57,12 @@ const LoginForm = () => {
       setIsSubmitting(true);
       setErrors({});
 
-      await axios.post("/api/auth/login", formData);
+      await loginStudent({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Здесь потом можно будет сделать navigate(...) на защищённую страницу
     } catch (error) {
       setErrors({
         server:

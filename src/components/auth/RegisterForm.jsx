@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
-import axios from "axios";
 import AuthInput from "./AuthInput";
 import PasswordInput from "./PasswordInput";
+import { registerStudent } from "../../api/auth.api";
 import { Link } from "react-router-dom";
 
 const initialState = {
@@ -29,6 +29,7 @@ const RegisterForm = () => {
     setErrors((prev) => ({
       ...prev,
       [name]: "",
+      server: "",
     }));
 
     setSuccessMessage("");
@@ -97,21 +98,23 @@ const RegisterForm = () => {
       setSuccessMessage("");
 
       const payload = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+        name: formData.firstName,
+        surname: formData.lastName,
         email: formData.email,
         password: formData.password,
+        passwordConfirm: formData.passwordConfirm,
       };
 
-      await axios.post("/api/auth/register", payload);
+      await registerStudent(payload);
 
       setSuccessMessage("Регистрация прошла успешно!");
       setFormData(initialState);
     } catch (error) {
-      const message =
-        error?.response?.data?.message || "Ошибка регистрации. Попробуйте снова.";
-
-      setErrors({ server: message });
+      setErrors({
+        server:
+          error?.response?.data?.message ||
+          "Ошибка регистрации. Попробуйте снова.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -129,7 +132,7 @@ const RegisterForm = () => {
         </h1>
 
         <p className="mt-2 text-sm text-slate-500">
-          Создайте аккаунт для поиска стажировок и вакансий в IT-компаниях
+          Создайте аккаунт для поиска стажировок и вакансий
         </p>
       </div>
 
@@ -223,13 +226,13 @@ const RegisterForm = () => {
         </button>
 
         <p className="text-center text-sm text-slate-500">
-            Уже есть аккаунт?{" "}
-        <Link
+          Уже есть аккаунт?{" "}
+          <Link
             to="/student/login"
             className="font-medium text-indigo-600 hover:text-indigo-700"
-        >
+          >
             Войти
-        </Link>
+          </Link>
         </p>
       </form>
     </div>
