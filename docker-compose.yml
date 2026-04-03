@@ -1,0 +1,21 @@
+services:
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: student-it-platform-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  frontend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: student-it-platform-frontend-prod
+    ports:
+      - "3000:80"
