@@ -56,43 +56,6 @@ const EmployerProfilePage = () => {
 
                 <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
                     <EmployerProfileForm />
-
-                    <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-                        <h2 className="text-xl font-semibold text-slate-900">
-                            Подсказки по работе с аккаунтом
-                        </h2>
-
-                        <div className="mt-6 space-y-4">
-                            <div className="rounded-2xl bg-slate-50 p-4">
-                                <p className="text-sm font-medium text-slate-700">
-                                    Поддерживайте актуальный email
-                                </p>
-                                <p className="mt-2 text-sm leading-6 text-slate-500">
-                                    Этот адрес используется для входа и дальнейшей работы с
-                                    кабинетом работодателя.
-                                </p>
-                            </div>
-
-                            <div className="rounded-2xl bg-slate-50 p-4">
-                                <p className="text-sm font-medium text-slate-700">
-                                    Используйте надёжный пароль
-                                </p>
-                                <p className="mt-2 text-sm leading-6 text-slate-500">
-                                    Новый пароль лучше делать длиннее и уникальнее предыдущего.
-                                </p>
-                            </div>
-
-                            <div className="rounded-2xl bg-indigo-50 p-4">
-                                <p className="text-sm font-medium text-indigo-800">
-                                    Следующий шаг развития кабинета
-                                </p>
-                                <p className="mt-2 text-sm leading-6 text-indigo-700">
-                                    Позже сюда можно добавить профиль компании, публикацию вакансий
-                                    и управление откликами студентов.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
                 </div>
             </div>
         </AuthLayout>
