@@ -9,3 +9,8 @@ export const STUDENT_PROFILE_ENDPOINTS = {
   AVATAR: "/StudentProfile/avatar",
   LOGOUT: "/StudentProfile/logout",
 };
+
+export const EMPLOYER_PROFILE_ENDPOINTS = {
+  CURRENT: "/EmployerProfile",
+  LOGOUT: "/EmployerProfile/logout",
+};
