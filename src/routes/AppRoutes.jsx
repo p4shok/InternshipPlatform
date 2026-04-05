@@ -13,6 +13,7 @@ import StudentVacanciesPage from "../features/student/pages/StudentVacanciesPage
 import EmployerAuthChoicePage from "../features/employer/pages/EmployerAuthChoicePage";
 import EmployerLoginPage from "../features/employer/pages/EmployerLoginPage";
 import EmployerRegisterPage from "../features/employer/pages/EmployerRegisterPage";
+import EmployerProfilePage from "../features/employer/pages/EmployerProfilePage";
 
 const AppRoutes = () => {
     return (
@@ -28,6 +29,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.EMPLOYER_AUTH} element={<EmployerAuthChoicePage />} />
             <Route path={ROUTES.EMPLOYER_LOGIN} element={<EmployerLoginPage />} />
             <Route path={ROUTES.EMPLOYER_REGISTER} element={<EmployerRegisterPage />} />
+            <Route path={ROUTES.EMPLOYER_PROFILE} element={<EmployerProfilePage />} />
         </Routes>
     );
 };
