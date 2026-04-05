@@ -71,7 +71,7 @@ const LoginForm = ({ role = "student" }) => {
       });
 
       navigate(
-          isEmployer ? ROUTES.HOME : ROUTES.STUDENT_VACANCIES
+          isEmployer ? ROUTES.EMPLOYER_PROFILE : ROUTES.STUDENT_VACANCIES
       );
     } catch (error) {
       setErrors({
