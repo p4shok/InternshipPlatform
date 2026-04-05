@@ -10,4 +10,5 @@ export const ROUTES = {
   EMPLOYER_AUTH: "/employer/auth",
   EMPLOYER_LOGIN: "/employer/login",
   EMPLOYER_REGISTER: "/employer/register",
+  EMPLOYER_PROFILE: "/employer/profile",
 };
