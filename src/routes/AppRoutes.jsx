@@ -8,6 +8,7 @@ import StudentAuthChoicePage from "../features/student/pages/StudentAuthChoicePa
 import StudentLoginPage from "../features/student/pages/StudentLoginPage";
 import StudentRegisterPage from "../features/student/pages/StudentRegisterPage";
 import StudentProfilePage from "../features/student/pages/StudentProfilePage";
+import StudentVacanciesPage from "../features/student/pages/StudentVacanciesPage";
 
 import EmployerAuthChoicePage from "../features/employer/pages/EmployerAuthChoicePage";
 import EmployerLoginPage from "../features/employer/pages/EmployerLoginPage";
@@ -22,6 +23,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.STUDENT_LOGIN} element={<StudentLoginPage />} />
             <Route path={ROUTES.STUDENT_REGISTER} element={<StudentRegisterPage />} />
             <Route path={ROUTES.STUDENT_PROFILE} element={<StudentProfilePage />} />
+            <Route path={ROUTES.STUDENT_VACANCIES} element={<StudentVacanciesPage />} />
 
             <Route path={ROUTES.EMPLOYER_AUTH} element={<EmployerAuthChoicePage />} />
             <Route path={ROUTES.EMPLOYER_LOGIN} element={<EmployerLoginPage />} />
