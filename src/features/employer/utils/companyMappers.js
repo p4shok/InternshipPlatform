@@ -4,7 +4,7 @@ export const mapCompanyResponseToForm = (company) => ({
     inn: company?.inn || "",
     link: company?.link || "",
     description: company?.description || "",
-    logoUrl: company?.logoUrl || "",
+    logoUrl: company?.logoPath || "",
 });
 
 export const mapCompanyFormToDto = (formData) => ({
