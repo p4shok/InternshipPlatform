@@ -14,3 +14,8 @@ export const EMPLOYER_PROFILE_ENDPOINTS = {
   CURRENT: "/EmployerProfile",
   LOGOUT: "/EmployerProfile/logout",
 };
+
+export const COMPANY_ENDPOINTS = {
+  BASE: "/Company",
+  LOGO: "/Company/logo",
+};
