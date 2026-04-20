@@ -1,74 +1,113 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../../layouts/AuthLayout";
 import { ROUTES } from "../../../routes/routePaths";
 import VacancyCard from "../components/VacancyCard";
 import VacancyFilters from "../components/VacancyFilters";
 import VacancySearchBar from "../components/VacancySearchBar";
-
-const mockVacancies = [
-    {
-        id: 1,
-        title: "Frontend Intern (React)",
-        company: "TechNova",
-        type: "Стажировка",
-        workFormat: "Удалённо",
-        salary: "от 40 000 ₽",
-        location: "Москва / Remote",
-        description:
-            "Ищем студента на стажировку во frontend-команду. Будете работать с React, UI-компонентами и внутренними сервисами.",
-        skills: ["React", "JavaScript", "HTML", "CSS", "Git"],
-    },
-    {
-        id: 2,
-        title: "Junior Backend Developer",
-        company: "CloudSoft",
-        type: "Частичная занятость",
-        workFormat: "Гибрид",
-        salary: "от 60 000 ₽",
-        location: "Санкт-Петербург",
-        description:
-            "Подойдёт студентам, которые хотят развиваться в backend-разработке, изучать API, базы данных и работу с серверной логикой.",
-        skills: ["C#", ".NET", "SQL", "REST API"],
-    },
-    {
-        id: 3,
-        title: "QA Intern",
-        company: "Digital Start",
-        type: "Стажировка",
-        workFormat: "Офис",
-        salary: "по результатам собеседования",
-        location: "Казань",
-        description:
-            "Стажировка для начинающих специалистов по тестированию. Поможем погрузиться в ручное тестирование, баг-репорты и тест-кейсы.",
-        skills: ["QA", "Postman", "API", "Test Cases"],
-    },
-];
+import { getSpecializations } from "../api/dictionaries.api";
+import {
+    getRecommendedVacancies,
+    getVacancies,
+} from "../api/vacancies.api";
+import { mapVacancyToCardModel } from "../utils/vacancyMappers";
 
 const StudentVacanciesPage = () => {
     const navigate = useNavigate();
     const [searchValue, setSearchValue] = useState("");
+    const [vacancies, setVacancies] = useState([]);
+    const [recommendedVacancies, setRecommendedVacancies] = useState([]);
+    const [specializations, setSpecializations] = useState([]);
+    const [filters, setFilters] = useState({
+        isRemote: "",
+        region: "",
+        salaryFrom: "",
+        specializationId: "",
+    });
+    const [isLoading, setIsLoading] = useState(true);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [error, setError] = useState("");
+
+    const loadData = async (withRefreshingState = false) => {
+        try {
+            if (withRefreshingState) {
+                setIsRefreshing(true);
+            } else {
+                setIsLoading(true);
+            }
+
+            setError("");
+
+            const [vacancyList, recommendedList, specializationList] = await Promise.all([
+                getVacancies({
+                    search: searchValue,
+                    searchInTitle: true,
+                    searchInDescription: true,
+                    searchInCompanyName: true,
+                    isRemote:
+                        filters.isRemote === ""
+                            ? undefined
+                            : filters.isRemote === "true",
+                    region: filters.region,
+                    salaryFrom: filters.salaryFrom || undefined,
+                    specializationId: filters.specializationId || undefined,
+                    pageIndex: 1,
+                    pageSize: 30,
+                }),
+                getRecommendedVacancies(1, 6),
+                getSpecializations(),
+            ]);
+
+            setVacancies(vacancyList.map(mapVacancyToCardModel));
+            setRecommendedVacancies(recommendedList.map(mapVacancyToCardModel));
+            setSpecializations(specializationList);
+        } catch (loadError) {
+            setError(
+                loadError?.response?.data?.message ||
+                    "Не удалось загрузить вакансии. Проверьте авторизацию и попробуйте снова."
+            );
+        } finally {
+            setIsLoading(false);
+            setIsRefreshing(false);
+        }
+    };
+
+    useEffect(() => {
+        loadData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleSearch = () => {
+        loadData(true);
+    };
+
+    const handleFilterChange = (name, value) => {
+        setFilters((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     const filteredVacancies = useMemo(() => {
         const normalizedQuery = searchValue.trim().toLowerCase();
 
         if (!normalizedQuery) {
-            return mockVacancies;
+            return vacancies;
         }
 
-        return mockVacancies.filter((vacancy) => {
+        return vacancies.filter((vacancy) => {
             const searchableText = [
                 vacancy.title,
                 vacancy.company,
                 vacancy.description,
-                vacancy.skills.join(" "),
+                (vacancy.skills || []).join(" "),
             ]
                 .join(" ")
                 .toLowerCase();
 
             return searchableText.includes(normalizedQuery);
         });
-    }, [searchValue]);
+    }, [searchValue, vacancies]);
 
     return (
         <AuthLayout>
@@ -85,9 +124,8 @@ const StudentVacanciesPage = () => {
                             </h1>
 
                             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">
-                                Здесь будут показываться вакансии, подобранные под профиль студента,
-                                навыки и интересы. Пока API ещё не подключено, поэтому страница
-                                работает как интерактивный макет будущего раздела.
+                                Вакансии подбираются по вашему профилю и резюме.
+                                Используйте поиск и фильтры, чтобы получить более релевантные результаты.
                             </p>
                         </div>
 
@@ -102,20 +140,59 @@ const StudentVacanciesPage = () => {
 
                             <button
                                 type="button"
+                                onClick={() => navigate(ROUTES.STUDENT_RESUMES)}
                                 className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
                             >
-                                Рекомендации
+                                Мои резюме
                             </button>
                         </div>
                     </div>
                 </section>
 
+                <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                        <h2 className="text-xl font-semibold text-slate-900">
+                            Рекомендации для вас
+                        </h2>
+                        <button
+                            type="button"
+                            onClick={() => loadData(true)}
+                            className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                        >
+                            Обновить рекомендации
+                        </button>
+                    </div>
+
+                    {recommendedVacancies.length > 0 ? (
+                        <div className="mt-4 space-y-4">
+                            {recommendedVacancies.slice(0, 3).map((vacancy) => (
+                                <VacancyCard key={`recommended-${vacancy.id}`} vacancy={vacancy} />
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="mt-4 text-sm text-slate-500">
+                            Рекомендации появятся после заполнения профиля и резюме.
+                        </p>
+                    )}
+                </section>
+
                 <VacancySearchBar
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
+                    onSearch={handleSearch}
                 />
 
-                <VacancyFilters />
+                <VacancyFilters
+                    filters={filters}
+                    onFilterChange={handleFilterChange}
+                    specializations={specializations}
+                />
+
+                {error && (
+                    <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                        {error}
+                    </div>
+                )}
 
                 <section className="space-y-4">
                     <div className="flex items-center justify-between">
@@ -123,11 +200,17 @@ const StudentVacanciesPage = () => {
                             Подходящие предложения
                         </h2>
                         <p className="text-sm text-slate-500">
-                            Найдено: {filteredVacancies.length}
+                            {isRefreshing || isLoading
+                                ? "Обновление..."
+                                : `Найдено: ${filteredVacancies.length}`}
                         </p>
                     </div>
 
-                    {filteredVacancies.length > 0 ? (
+                    {isLoading ? (
+                        <div className="rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+                            <p className="text-sm text-slate-500">Загрузка вакансий...</p>
+                        </div>
+                    ) : filteredVacancies.length > 0 ? (
                         <div className="space-y-4">
                             {filteredVacancies.map((vacancy) => (
                                 <VacancyCard key={vacancy.id} vacancy={vacancy} />

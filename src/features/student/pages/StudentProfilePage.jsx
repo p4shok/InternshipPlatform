@@ -55,6 +55,23 @@ const StudentProfilePage = () => {
                     isLoggingOut={isLoggingOut}
                 />
 
+                <div className="flex flex-wrap gap-3">
+                    <button
+                        type="button"
+                        onClick={() => navigate(ROUTES.STUDENT_VACANCIES)}
+                        className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    >
+                        К вакансиям
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => navigate(ROUTES.STUDENT_RESUMES)}
+                        className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    >
+                        Мои резюме
+                    </button>
+                </div>
+
                 <StudentAvatarUpload onUploadSuccess={() => {}} />
 
                 <StudentProfileForm />

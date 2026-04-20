@@ -70,6 +70,16 @@ const EmployerProfilePage = () => {
                     isLoggingOut={isLoggingOut}
                 />
 
+                <div className="flex flex-wrap gap-3">
+                    <button
+                        type="button"
+                        onClick={() => navigate(ROUTES.EMPLOYER_VACANCIES)}
+                        className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    >
+                        Вакансии компании
+                    </button>
+                </div>
+
                 <CompanyLogoUpload
                     logoUrl={companyData?.logoUrl}
                     onUploadSuccess={handleLogoUploaded}

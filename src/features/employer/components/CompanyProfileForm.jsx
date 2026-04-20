@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AuthInput from "../../../components/ui/AuthInput";
-import { getCurrentEmployerProfile } from "../api/employerProfile.api";
-import { updateCompany } from "../api/company.api";
+import { getCurrentEmployerCompany, updateCompany } from "../api/company.api";
 import {
     mapCompanyFormToDto,
     mapCompanyResponseToForm,
@@ -30,16 +29,7 @@ const CompanyProfileForm = ({ refreshKey = 0, onCompanyLoaded }) => {
             setErrors({});
             setSuccessMessage("");
 
-            const employer = await getCurrentEmployerProfile();
-            const company = employer?.company;
-
-            if (!company) {
-                setErrors({
-                    server: "Не удалось загрузить данные компании текущего работодателя.",
-                });
-                return;
-            }
-
+            const company = await getCurrentEmployerCompany();
             const mappedData = mapCompanyResponseToForm(company);
 
             setFormData(mappedData);
@@ -57,6 +47,7 @@ const CompanyProfileForm = ({ refreshKey = 0, onCompanyLoaded }) => {
 
     useEffect(() => {
         loadCompany();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refreshKey]);
 
     const handleChange = (e) => {
@@ -144,6 +135,7 @@ const CompanyProfileForm = ({ refreshKey = 0, onCompanyLoaded }) => {
                         onChange={handleChange}
                         placeholder="Введите ИНН"
                         error={errors.inn}
+                        disabled
                     />
 
                     <div className="md:col-span-2">

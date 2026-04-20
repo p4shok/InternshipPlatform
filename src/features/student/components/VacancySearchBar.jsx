@@ -1,6 +1,6 @@
 import React from "react";
 
-const VacancySearchBar = ({ value, onChange }) => {
+const VacancySearchBar = ({ value, onChange, onSearch }) => {
     return (
         <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex flex-col gap-3 md:flex-row">
@@ -14,6 +14,7 @@ const VacancySearchBar = ({ value, onChange }) => {
 
                 <button
                     type="button"
+                    onClick={onSearch}
                     className="rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
                 >
                     Найти

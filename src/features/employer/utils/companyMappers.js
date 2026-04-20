@@ -9,7 +9,6 @@ export const mapCompanyResponseToForm = (company) => ({
 
 export const mapCompanyFormToDto = (formData) => ({
     name: formData.name,
-    inn: formData.inn,
     link: formData.link,
     description: formData.description,
 });

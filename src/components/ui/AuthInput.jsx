@@ -9,6 +9,7 @@ const AuthInput = ({
   placeholder,
   error,
   autoComplete,
+  ...props
 }) => {
   return (
     <div className="space-y-2">
@@ -27,6 +28,7 @@ const AuthInput = ({
         onChange={onChange}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        {...props}
         className={`w-full rounded-2xl border bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition-all duration-200 placeholder:text-slate-400
           ${
             error

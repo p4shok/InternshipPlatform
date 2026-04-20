@@ -31,5 +31,5 @@ export const mapStudentProfileFormToDto = (formData) => ({
     githubLink: formData.githubLink,
     university: formData.university,
     specialization: formData.specialization,
-    graduationYear: formData.graduationYear ? Number(formData.graduationYear) : 0,
+    graduationYear: formData.graduationYear ? Number(formData.graduationYear) : null,
 });
