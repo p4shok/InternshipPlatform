@@ -42,6 +42,7 @@ const StudentResumesPage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [isConstructorOpen, setIsConstructorOpen] = useState(false);
 
     const selectedResume = useMemo(
         () => resumes.find((item) => item.id === selectedResumeId) || null,
@@ -128,6 +129,7 @@ const StudentResumesPage = () => {
     const resetForm = () => {
         setEditingResumeId(null);
         setFormData(initialFormState);
+        setIsConstructorOpen(false);
     };
 
     const validateForm = () => {
@@ -169,7 +171,9 @@ const StudentResumesPage = () => {
                     ? selectedResumeId
                     : updatedResumes[0]?.id || null;
             await loadRecommended(recommendedResumeId);
-            resetForm();
+            setEditingResumeId(null);
+            setFormData(initialFormState);
+            setIsConstructorOpen(false);
         } catch (submitError) {
             setError(
                 submitError?.response?.data?.message ||
@@ -185,6 +189,7 @@ const StudentResumesPage = () => {
         setFormData(mapResumeToFormModel(resume));
         setError("");
         setSuccessMessage("");
+        setIsConstructorOpen(true);
     };
 
     const handleDeleteResume = async (resumeId) => {
@@ -294,7 +299,7 @@ const StudentResumesPage = () => {
                     </div>
                 )}
 
-                <section className="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
+                <section className={`grid gap-6 ${isConstructorOpen ? "xl:grid-cols-[1.2fr_1fr]" : ""}`}>
                     <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
                         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                             <h2 className="text-xl font-semibold text-slate-900">
@@ -302,7 +307,11 @@ const StudentResumesPage = () => {
                             </h2>
                             <button
                                 type="button"
-                                onClick={resetForm}
+                                onClick={() => {
+                                    setEditingResumeId(null);
+                                    setFormData(initialFormState);
+                                    setIsConstructorOpen(true);
+                                }}
                                 className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
                             >
                                 Новое резюме
@@ -372,17 +381,18 @@ const StudentResumesPage = () => {
                             </div>
                         ) : (
                             <p className="text-sm text-slate-500">
-                                У вас пока нет резюме. Создайте первое резюме справа.
+                                У вас пока нет резюме. Нажмите "Новое резюме", чтобы открыть конструктор.
                             </p>
                         )}
                     </article>
 
-                    <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                        <h2 className="text-xl font-semibold text-slate-900">
-                            {editingResumeId ? "Редактирование резюме" : "Создание резюме"}
-                        </h2>
+                    {isConstructorOpen && (
+                        <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                            <h2 className="text-xl font-semibold text-slate-900">
+                                {editingResumeId ? "Редактирование резюме" : "Создание резюме"}
+                            </h2>
 
-                        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                            <form onSubmit={handleSubmit} className="mt-4 space-y-4">
                             <textarea
                                 name="description"
                                 rows={4}
@@ -454,26 +464,25 @@ const StudentResumesPage = () => {
                                 Резюме активно
                             </label>
 
-                            <div className="flex flex-wrap gap-2">
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 disabled:opacity-70"
-                                >
-                                    {isSubmitting ? "Сохранение..." : "Сохранить"}
-                                </button>
-                                {editingResumeId && (
+                                <div className="flex flex-wrap gap-2">
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 disabled:opacity-70"
+                                    >
+                                        {isSubmitting ? "Сохранение..." : "Сохранить"}
+                                    </button>
                                     <button
                                         type="button"
                                         onClick={resetForm}
                                         className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                                     >
-                                        Отменить
+                                        Закрыть
                                     </button>
-                                )}
-                            </div>
-                        </form>
-                    </article>
+                                </div>
+                            </form>
+                        </article>
+                    )}
                 </section>
 
                 <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">

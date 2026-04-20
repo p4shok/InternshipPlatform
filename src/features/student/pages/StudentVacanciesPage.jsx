@@ -4,7 +4,6 @@ import AuthLayout from "../../../layouts/AuthLayout";
 import { ROUTES } from "../../../routes/routePaths";
 import VacancyCard from "../components/VacancyCard";
 import VacancyFilters from "../components/VacancyFilters";
-import VacancySearchBar from "../components/VacancySearchBar";
 import { getSpecializations } from "../api/dictionaries.api";
 import {
     getRecommendedVacancies,
@@ -27,6 +26,7 @@ const StudentVacanciesPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState("");
+    const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
     const loadData = async (withRefreshingState = false) => {
         try {
@@ -112,38 +112,36 @@ const StudentVacanciesPage = () => {
     return (
         <AuthLayout>
             <div className="w-full space-y-6">
-                <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-                    <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                        <div>
-              <span className="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700">
-                Подбор вакансий
-              </span>
-
-                            <h1 className="mt-4 text-3xl font-bold text-slate-900">
-                                Вакансии и стажировки для студентов
-                            </h1>
-
-                            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">
-                                Вакансии подбираются по вашему профилю и резюме.
-                                Используйте поиск и фильтры, чтобы получить более релевантные результаты.
-                            </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-3">
+                <section className="sticky top-4 z-20 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <div className="flex flex-col gap-3 lg:flex-row">
+                        <input
+                            type="text"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            placeholder="Поиск по вакансии, стеку или компании"
+                            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                        />
+                        <div className="flex flex-wrap gap-2">
+                            <button
+                                type="button"
+                                onClick={handleSearch}
+                                className="rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
+                            >
+                                Найти
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setIsFiltersOpen(true)}
+                                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                            >
+                                Фильтры
+                            </button>
                             <button
                                 type="button"
                                 onClick={() => navigate(ROUTES.STUDENT_PROFILE)}
-                                className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                             >
-                                Мой профиль
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => navigate(ROUTES.STUDENT_RESUMES)}
-                                className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
-                            >
-                                Мои резюме
+                                Профиль
                             </button>
                         </div>
                     </div>
@@ -175,18 +173,6 @@ const StudentVacanciesPage = () => {
                         </p>
                     )}
                 </section>
-
-                <VacancySearchBar
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    onSearch={handleSearch}
-                />
-
-                <VacancyFilters
-                    filters={filters}
-                    onFilterChange={handleFilterChange}
-                    specializations={specializations}
-                />
 
                 {error && (
                     <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
@@ -227,6 +213,56 @@ const StudentVacanciesPage = () => {
                         </div>
                     )}
                 </section>
+
+                {isFiltersOpen && (
+                    <div className="fixed inset-0 z-40 bg-slate-900/30">
+                        <div className="ml-auto h-full w-full max-w-md overflow-auto bg-slate-50 p-4">
+                            <div className="mb-4 flex items-center justify-between">
+                                <h3 className="text-lg font-semibold text-slate-900">Фильтры</h3>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsFiltersOpen(false)}
+                                    className="rounded-2xl border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                                >
+                                    Закрыть
+                                </button>
+                            </div>
+
+                            <VacancyFilters
+                                filters={filters}
+                                onFilterChange={handleFilterChange}
+                                specializations={specializations}
+                            />
+
+                            <div className="mt-4 flex gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setIsFiltersOpen(false);
+                                        handleSearch();
+                                    }}
+                                    className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
+                                >
+                                    Применить
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setFilters({
+                                            isRemote: "",
+                                            region: "",
+                                            salaryFrom: "",
+                                            specializationId: "",
+                                        });
+                                    }}
+                                    className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                                >
+                                    Сбросить
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </AuthLayout>
     );

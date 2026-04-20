@@ -42,6 +42,7 @@ const EmployerVacanciesPage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [isConstructorOpen, setIsConstructorOpen] = useState(false);
 
     const loadData = async () => {
         try {
@@ -74,6 +75,7 @@ const EmployerVacanciesPage = () => {
     const resetForm = () => {
         setEditingVacancyId(null);
         setFormData(initialFormState);
+        setIsConstructorOpen(false);
     };
 
     const handleFormChange = (event) => {
@@ -131,7 +133,9 @@ const EmployerVacanciesPage = () => {
             }
 
             await loadData();
-            resetForm();
+            setEditingVacancyId(null);
+            setFormData(initialFormState);
+            setIsConstructorOpen(false);
         } catch (submitError) {
             setError(
                 submitError?.response?.data?.message ||
@@ -156,6 +160,7 @@ const EmployerVacanciesPage = () => {
             skillIds: vacancy.skillIds || [],
             isActive: vacancy.isActive,
         });
+        setIsConstructorOpen(true);
     };
 
     const handleDeleteVacancy = async (vacancyId) => {
@@ -211,7 +216,11 @@ const EmployerVacanciesPage = () => {
                             </button>
                             <button
                                 type="button"
-                                onClick={resetForm}
+                                onClick={() => {
+                                    setEditingVacancyId(null);
+                                    setFormData(initialFormState);
+                                    setIsConstructorOpen(true);
+                                }}
                                 className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
                             >
                                 Новая вакансия
@@ -232,7 +241,7 @@ const EmployerVacanciesPage = () => {
                     </div>
                 )}
 
-                <section className="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
+                <section className={`grid gap-6 ${isConstructorOpen ? "xl:grid-cols-[1.2fr_1fr]" : ""}`}>
                     <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
                         <h2 className="text-xl font-semibold text-slate-900">Список вакансий</h2>
                         {vacancies.length > 0 ? (
@@ -279,17 +288,18 @@ const EmployerVacanciesPage = () => {
                             </div>
                         ) : (
                             <p className="mt-4 text-sm text-slate-500">
-                                Вакансии пока не созданы.
+                                Вакансии пока не созданы. Нажмите "Новая вакансия", чтобы открыть конструктор.
                             </p>
                         )}
                     </article>
 
-                    <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                        <h2 className="text-xl font-semibold text-slate-900">
-                            {editingVacancyId ? "Редактирование вакансии" : "Создание вакансии"}
-                        </h2>
+                    {isConstructorOpen && (
+                        <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                            <h2 className="text-xl font-semibold text-slate-900">
+                                {editingVacancyId ? "Редактирование вакансии" : "Создание вакансии"}
+                            </h2>
 
-                        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                            <form onSubmit={handleSubmit} className="mt-4 space-y-4">
                             <input
                                 name="title"
                                 value={formData.title}
@@ -400,7 +410,7 @@ const EmployerVacanciesPage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-2">
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
@@ -408,18 +418,17 @@ const EmployerVacanciesPage = () => {
                                 >
                                     {isSubmitting ? "Сохранение..." : "Сохранить"}
                                 </button>
-                                {editingVacancyId && (
                                     <button
                                         type="button"
                                         onClick={resetForm}
                                         className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                                     >
-                                        Отменить
+                                        Закрыть
                                     </button>
-                                )}
-                            </div>
-                        </form>
-                    </article>
+                                </div>
+                            </form>
+                        </article>
+                    )}
                 </section>
             </div>
         </AuthLayout>
