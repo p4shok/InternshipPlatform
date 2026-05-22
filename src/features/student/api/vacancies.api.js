@@ -1,6 +1,6 @@
 import api from "../../../api/axios";
 import { VACANCIES_ENDPOINTS } from "../../../api/endpoints";
-import { extractItems } from "../../../api/response";
+import { extractData, extractItems } from "../../../api/response";
 
 const appendArrayParams = (params, key, values) => {
     if (!Array.isArray(values)) return;
@@ -45,6 +45,11 @@ export const getVacancies = async (filters = {}) => {
     const params = buildVacancyQueryParams(filters);
     const response = await api.get(VACANCIES_ENDPOINTS.LIST, { params });
     return extractItems(response.data);
+};
+
+export const getVacancyDetails = async (vacancyId) => {
+    const response = await api.get(VACANCIES_ENDPOINTS.BY_ID(vacancyId));
+    return extractData(response.data);
 };
 
 export const getRecommendedVacancies = async (pageIndex = 1, pageSize = 8) => {

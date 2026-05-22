@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthInput from "../../../components/ui/AuthInput";
 import PasswordInput from "../../../components/ui/PasswordInput";
-import { loginStudent, loginEmployer } from "../api/auth.api";
+import { loginStudent, loginEmployer, loginTeacher } from "../api/auth.api";
 import { ROUTES } from "../../../routes/routePaths";
 
 const LoginForm = ({ role = "student" }) => {
@@ -17,6 +17,7 @@ const LoginForm = ({ role = "student" }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEmployer = role === "employer";
+  const isTeacher = role === "teacher";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +64,11 @@ const LoginForm = ({ role = "student" }) => {
       setIsSubmitting(true);
       setErrors({});
 
-      const loginAction = isEmployer ? loginEmployer : loginStudent;
+      const loginAction = isEmployer
+        ? loginEmployer
+        : isTeacher
+          ? loginTeacher
+          : loginStudent;
 
       await loginAction({
         email: formData.email,
@@ -71,7 +76,11 @@ const LoginForm = ({ role = "student" }) => {
       });
 
       navigate(
-          isEmployer ? ROUTES.EMPLOYER_PROFILE : ROUTES.STUDENT_VACANCIES
+          isEmployer
+            ? ROUTES.EMPLOYER_PROFILE
+            : isTeacher
+              ? ROUTES.TEACHER_CABINET
+              : ROUTES.STUDENT_VACANCIES
       );
     } catch (error) {
       setErrors({
@@ -90,7 +99,9 @@ const LoginForm = ({ role = "student" }) => {
           <p className="mt-2 text-sm text-slate-500">
             {isEmployer
                 ? "Войдите в аккаунт работодателя"
-                : "Войдите в аккаунт студента"}
+                : isTeacher
+                  ? "Войдите в аккаунт преподавателя"
+                  : "Войдите в аккаунт студента"}
           </p>
         </div>
 
@@ -133,7 +144,13 @@ const LoginForm = ({ role = "student" }) => {
           <p className="text-center text-sm text-slate-500">
             Нет аккаунта?{" "}
             <Link
-                to={isEmployer ? ROUTES.EMPLOYER_REGISTER : ROUTES.STUDENT_REGISTER}
+                to={
+                  isEmployer
+                    ? ROUTES.EMPLOYER_REGISTER
+                    : isTeacher
+                      ? ROUTES.TEACHER_REGISTER
+                      : ROUTES.STUDENT_REGISTER
+                }
                 className="font-medium text-indigo-600 hover:text-indigo-700"
             >
               Зарегистрироваться

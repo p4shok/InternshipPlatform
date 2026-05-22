@@ -1,6 +1,12 @@
 import React from "react";
 
-const VacancyCard = ({ vacancy }) => {
+const VacancyCard = ({
+    vacancy,
+    onView,
+    onApply,
+    onToggleFavorite,
+    isFavoriteLoading = false,
+}) => {
     return (
         <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -43,20 +49,34 @@ const VacancyCard = ({ vacancy }) => {
                 <div className="flex shrink-0 flex-col gap-3 lg:items-end">
                     <p className="text-sm font-semibold text-slate-900">{vacancy.salary}</p>
                     <p className="text-xs text-slate-500">{vacancy.location}</p>
+                    <button
+                        type="button"
+                        onClick={() => onToggleFavorite?.(vacancy)}
+                        disabled={!onToggleFavorite || isFavoriteLoading}
+                        className={`rounded-2xl px-4 py-2 text-sm font-medium transition ${
+                            vacancy.isFavorite
+                                ? "border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100"
+                                : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                        } disabled:cursor-not-allowed disabled:opacity-60`}
+                    >
+                        {vacancy.isFavorite ? "В избранном" : "В избранное"}
+                    </button>
 
                     <div className="flex gap-2">
                         <button
                             type="button"
-                            disabled
-                            className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                            onClick={() => onView?.(vacancy)}
+                            disabled={!onView}
+                            className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             Подробнее
                         </button>
 
                         <button
                             type="button"
-                            disabled
-                            className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
+                            onClick={() => onApply?.(vacancy)}
+                            disabled={!onApply}
+                            className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             Откликнуться
                         </button>

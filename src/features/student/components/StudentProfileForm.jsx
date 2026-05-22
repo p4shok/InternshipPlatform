@@ -31,6 +31,7 @@ const initialState = {
 
 const StudentProfileForm = () => {
     const [formData, setFormData] = useState(initialState);
+    const [initialFormData, setInitialFormData] = useState(initialState);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +41,9 @@ const StudentProfileForm = () => {
         try {
             setIsLoading(true);
             const data = await getCurrentStudentProfile();
-            setFormData(mapStudentProfileResponseToForm(data));
+            const mappedProfile = mapStudentProfileResponseToForm(data);
+            setFormData(mappedProfile);
+            setInitialFormData(mappedProfile);
         } catch (error) {
             setErrors({
                 server:
@@ -88,14 +91,27 @@ const StudentProfileForm = () => {
             setErrors({});
             setSuccessMessage("");
 
-            await updateStudentProfile(mapStudentProfileFormToDto(formData));
+            const payload = mapStudentProfileFormToDto(formData, initialFormData);
+
+            if (Object.keys(payload).length === 0) {
+                setSuccessMessage("Изменений нет.");
+                return;
+            }
+
+            await updateStudentProfile(payload);
 
             setSuccessMessage("Данные профиля успешно обновлены.");
-            setFormData((prev) => ({
-                ...prev,
+            const nextFormData = {
+                ...formData,
                 password: "",
                 passwordConfirm: "",
-            }));
+            };
+            setFormData(nextFormData);
+            setInitialFormData({
+                ...nextFormData,
+                password: "",
+                passwordConfirm: "",
+            });
         } catch (error) {
             setErrors({
                 server:

@@ -29,5 +29,14 @@ export const mapVacancyToCardModel = (vacancy) => {
         location: vacancy?.region || "Регион не указан",
         description: vacancy?.description || "Описание отсутствует",
         skills,
+        isFavorite: Boolean(vacancy?.isFavorite),
+        companyId: vacancy?.companyId || vacancy?.company?.id || null,
+        specializationName:
+            vacancy?.specializationName || vacancy?.specialization?.name || "",
+        minWorkExperienceYears:
+            vacancy?.minWorkExperienceYears !== null &&
+            vacancy?.minWorkExperienceYears !== undefined
+                ? vacancy.minWorkExperienceYears
+                : 0,
     };
 };

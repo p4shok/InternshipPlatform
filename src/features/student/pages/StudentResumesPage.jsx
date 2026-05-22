@@ -245,6 +245,16 @@ const StudentResumesPage = () => {
         }
     };
 
+    const handleVacancyAction = (vacancy, action) => {
+        if (!vacancy?.id) {
+            return;
+        }
+
+        navigate(ROUTES.STUDENT_VACANCY_DETAILS(vacancy.id), {
+            state: action === "apply" ? { openApplication: true } : null,
+        });
+    };
+
     if (isLoading) {
         return (
             <AuthLayout>
@@ -275,6 +285,13 @@ const StudentResumesPage = () => {
                                 className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                             >
                                 К вакансиям
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => navigate(ROUTES.STUDENT_APPLICATIONS)}
+                                className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                            >
+                                Отклики
                             </button>
                             <button
                                 type="button"
@@ -500,7 +517,12 @@ const StudentResumesPage = () => {
                     {recommendedVacancies.length > 0 ? (
                         <div className="mt-4 space-y-4">
                             {recommendedVacancies.map((vacancy) => (
-                                <VacancyCard key={`resume-vacancy-${vacancy.id}`} vacancy={vacancy} />
+                                <VacancyCard
+                                    key={`resume-vacancy-${vacancy.id}`}
+                                    vacancy={vacancy}
+                                    onView={(item) => handleVacancyAction(item, "view")}
+                                    onApply={(item) => handleVacancyAction(item, "apply")}
+                                />
                             ))}
                         </div>
                     ) : (

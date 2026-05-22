@@ -115,6 +115,20 @@ const EmployerProfilePage = () => {
                     </button>
                     <button
                         type="button"
+                        onClick={() => navigate(ROUTES.EMPLOYER_APPLICATIONS)}
+                        className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    >
+                        Отклики
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => navigate(ROUTES.EMPLOYER_CHATS)}
+                        className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    >
+                        Чаты
+                    </button>
+                    <button
+                        type="button"
                         onClick={() => setIsEmployerEditorOpen((prev) => !prev)}
                         className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                     >

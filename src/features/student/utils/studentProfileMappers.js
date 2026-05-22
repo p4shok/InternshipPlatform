@@ -16,20 +16,30 @@ export const mapStudentProfileResponseToForm = (profile) => ({
     graduationYear: profile?.graduationYear || "",
 });
 
-export const mapStudentProfileFormToDto = (formData) => ({
-    email: formData.email,
-    name: formData.name,
-    surname: formData.surname,
-    password: formData.password,
-    passwordConfirm: formData.passwordConfirm,
-    patronymic: formData.patronymic,
-    birthdayDate: formData.birthdayDate || null,
-    phone: formData.phone,
-    vkLink: formData.vkLink,
-    tgLink: formData.tgLink,
-    maxLink: formData.maxLink,
-    githubLink: formData.githubLink,
-    university: formData.university,
-    specialization: formData.specialization,
-    graduationYear: formData.graduationYear ? Number(formData.graduationYear) : null,
-});
+export const mapStudentProfileFormToDto = (formData, initialFormData = {}) => {
+    const dto = {};
+
+    const assignIfChanged = (fieldName, value) => {
+        if (value !== initialFormData[fieldName]) {
+            dto[fieldName] = value;
+        }
+    };
+
+    assignIfChanged("email", formData.email);
+    assignIfChanged("name", formData.name);
+    assignIfChanged("surname", formData.surname);
+    assignIfChanged("patronymic", formData.patronymic);
+    assignIfChanged("birthdayDate", formData.birthdayDate || null);
+    assignIfChanged("phone", formData.phone);
+    assignIfChanged("vkLink", formData.vkLink);
+    assignIfChanged("tgLink", formData.tgLink);
+    assignIfChanged("maxLink", formData.maxLink);
+    assignIfChanged("githubLink", formData.githubLink);
+
+    if (formData.password) {
+        dto.password = formData.password;
+        dto.passwordConfirm = formData.passwordConfirm;
+    }
+
+    return dto;
+};

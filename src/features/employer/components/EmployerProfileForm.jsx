@@ -19,6 +19,7 @@ const initialState = {
 
 const EmployerProfileForm = () => {
     const [formData, setFormData] = useState(initialState);
+    const [initialFormData, setInitialFormData] = useState(initialState);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +30,9 @@ const EmployerProfileForm = () => {
             setIsLoading(true);
             setErrors({});
             const data = await getCurrentEmployerProfile();
-            setFormData(mapEmployerProfileResponseToForm(data));
+            const mappedProfile = mapEmployerProfileResponseToForm(data);
+            setFormData(mappedProfile);
+            setInitialFormData(mappedProfile);
         } catch (error) {
             setErrors({
                 server:
@@ -77,14 +80,27 @@ const EmployerProfileForm = () => {
             setErrors({});
             setSuccessMessage("");
 
-            await updateEmployerProfile(mapEmployerProfileFormToDto(formData));
+            const payload = mapEmployerProfileFormToDto(formData, initialFormData);
+
+            if (Object.keys(payload).length === 0) {
+                setSuccessMessage("Изменений нет.");
+                return;
+            }
+
+            await updateEmployerProfile(payload);
 
             setSuccessMessage("Данные аккаунта успешно обновлены.");
-            setFormData((prev) => ({
-                ...prev,
+            const nextFormData = {
+                ...formData,
                 password: "",
                 passwordConfirm: "",
-            }));
+            };
+            setFormData(nextFormData);
+            setInitialFormData({
+                ...nextFormData,
+                password: "",
+                passwordConfirm: "",
+            });
         } catch (error) {
             setErrors({
                 server:

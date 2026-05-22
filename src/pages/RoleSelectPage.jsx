@@ -21,7 +21,8 @@ const RoleSelectPage = () => {
 
             <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
               Платформа помогает студентам находить стажировки и вакансии,
-              а работодателям — перспективных кандидатов.
+              работодателям — перспективных кандидатов, а преподавателям —
+              управлять учебными группами и заявками на вступление.
             </p>
           </div>
 
@@ -46,6 +47,13 @@ const RoleSelectPage = () => {
                 className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-base font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:text-indigo-700 hover:shadow-md"
               >
                 Я работодатель
+              </button>
+
+              <button
+                onClick={() => navigate(ROUTES.TEACHER_AUTH)}
+                className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-base font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 hover:text-indigo-700 hover:shadow-md"
+              >
+                Я преподаватель
               </button>
             </div>
           </div>

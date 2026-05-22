@@ -4,8 +4,17 @@ export const mapEmployerProfileResponseToForm = (profile) => ({
     passwordConfirm: "",
 });
 
-export const mapEmployerProfileFormToDto = (formData) => ({
-    email: formData.email,
-    password: formData.password,
-    passwordConfirm: formData.passwordConfirm,
-});
+export const mapEmployerProfileFormToDto = (formData, initialFormData = {}) => {
+    const dto = {};
+
+    if (formData.email !== initialFormData.email) {
+        dto.email = formData.email;
+    }
+
+    if (formData.password) {
+        dto.password = formData.password;
+        dto.passwordConfirm = formData.passwordConfirm;
+    }
+
+    return dto;
+};
