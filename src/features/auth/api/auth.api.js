@@ -1,7 +1,7 @@
-import api from "../../../api/axios";
-import { AUTH_ENDPOINTS } from "../../../api/endpoints";
-import { storeAuthSession, updateAuthSession } from "../utils/session";
-import { getCurrentStudentProfile } from "../../student/api/studentProfile.api";
+import api from "../../../api/axios.js";
+import { AUTH_ENDPOINTS } from "../../../api/endpoints.js";
+import { storeAuthSession, updateAuthSession } from "../utils/session.js";
+import { getCurrentStudentProfile } from "../../student/api/studentProfile.api.js";
 
 const persistAuthResponse = (responseData, extraSession = {}) => {
   if (responseData?.accessToken) {

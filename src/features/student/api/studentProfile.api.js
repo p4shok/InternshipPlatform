@@ -1,6 +1,6 @@
-import api from "../../../api/axios";
-import { STUDENT_PROFILE_ENDPOINTS } from "../../../api/endpoints";
-import { clearAuthSession } from "../../auth/utils/session";
+import api from "../../../api/axios.js";
+import { STUDENT_PROFILE_ENDPOINTS } from "../../../api/endpoints.js";
+import { clearAuthSession } from "../../auth/utils/session.js";
 
 export const getCurrentStudentProfile = async () => {
     const response = await api.get(STUDENT_PROFILE_ENDPOINTS.CURRENT);

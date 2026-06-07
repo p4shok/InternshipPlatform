@@ -1,4 +1,4 @@
-import { mapVacancyToCardModel } from "./vacancyMappers";
+import { mapVacancyToCardModel } from "./vacancyMappers.js";
 
 export const mapResumeToListModel = (resume) => {
     const skills = Array.isArray(resume?.skills)
